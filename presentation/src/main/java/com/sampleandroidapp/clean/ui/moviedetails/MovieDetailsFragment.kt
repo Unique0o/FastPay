@@ -21,7 +21,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding>() {
-
     private val args: MovieDetailsFragmentArgs by navArgs()
 
     @Inject
