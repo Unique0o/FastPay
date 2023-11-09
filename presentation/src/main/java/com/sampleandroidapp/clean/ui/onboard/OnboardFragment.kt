@@ -1,16 +1,26 @@
 package com.sampleandroidapp.clean.ui.onboard
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.AdapterViewFlipper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sampleandroidapp.clean.R
+import com.sampleandroidapp.clean.databinding.FragmentOnboardBinding
+import com.sampleandroidapp.clean.entities.OnboardModel
+import com.sampleandroidapp.clean.ui.adapter.movie.flipperAdapter.OnboardAdapterViewFlipper
+import com.sampleandroidapp.clean.ui.adapter.movie.simpleAdapter.DotsAdapter
+import com.sampleandroidapp.clean.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class OnboardFragment : Fragment() {
+@AndroidEntryPoint
+class OnboardFragment : BaseFragment<FragmentOnboardBinding>() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private val TOTAL_NUMBER: Int = 4
+    private lateinit var dotsAdapter: DotsAdapter
+    private val onboardScreensDataList: ArrayList<OnboardModel> by lazy {
+        arrayListOf()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,24 +29,15 @@ class OnboardFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_onboard, container, false)
+    override fun inflateViewBinding(inflater: LayoutInflater): FragmentOnboardBinding = FragmentOnboardBinding.inflate(inflater)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        prepareOnboardScreensDataList()
+        setupViews()
+        setAdapterViewFlipper()
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OnboardFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             OnboardFragment().apply {
@@ -44,5 +45,63 @@ class OnboardFragment : Fragment() {
 
                 }
             }
+    }
+
+    private fun setupViews(){
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() = with(binding.rvDot) {
+        dotsAdapter = DotsAdapter(TOTAL_NUMBER){
+
+        }.apply {
+            adapter = this
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL,false)
+            setItemViewCacheSize(0)
+        }
+    }
+
+    private fun prepareOnboardScreensDataList(){
+        onboardScreensDataList.add(
+            OnboardModel(
+                image = R.drawable.undraw_security_on,
+                title = getString(R.string.definitely_safe),
+                description = getString(R.string.lorem_ipsum)
+            )
+        )
+        onboardScreensDataList.add(
+            OnboardModel(
+                image = R.drawable.undraw_security_on,
+                title = getString(R.string.definitely_safe),
+                description = getString(R.string.lorem_ipsum)
+            )
+        )
+        onboardScreensDataList.add(
+            OnboardModel(
+                image = R.drawable.undraw_security_on,
+                title = getString(R.string.definitely_safe),
+                description = getString(R.string.lorem_ipsum)
+            )
+        )
+        onboardScreensDataList.add(
+            OnboardModel(
+                image = R.drawable.undraw_security_on,
+                title = getString(R.string.definitely_safe),
+                description = getString(R.string.lorem_ipsum)
+            )
+        )
+        onboardScreensDataList.add(
+            OnboardModel(
+                image = R.drawable.undraw_security_on,
+                title = getString(R.string.definitely_safe),
+                description = getString(R.string.lorem_ipsum)
+            )
+        )
+    }
+
+    private fun setAdapterViewFlipper(){
+        val adapterViewFlipper: AdapterViewFlipper = binding.adapterViewFlipper
+        val adapter = OnboardAdapterViewFlipper(requireContext(), onboardScreensDataList)
+        adapterViewFlipper.adapter = adapter
     }
 }

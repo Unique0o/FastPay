@@ -10,10 +10,16 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import javax.security.auth.callback.Callback
 
-class DotsAdapter(private val totalDots: Int) : RecyclerView.Adapter<DotsAdapter.ViewHolder>() {
+class DotsAdapter(
+    private val totalDots: Int,
+    private val currentPosition: (Int) -> Unit
+)
+: RecyclerView.Adapter<DotsAdapter.ViewHolder>() {
 
     private var _selectedPosition = 0
+
         set(value) {
             val oldPosition = field
             field = value
@@ -21,31 +27,57 @@ class DotsAdapter(private val totalDots: Int) : RecyclerView.Adapter<DotsAdapter
             notifyItemChanged(value)
         }
 
+    private val SELECTED_DOT_TYPE: Int = 1
+    private val DEFAULT_DOT_TYPE: Int = 0
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // Create dot view programmatically
         val dot = View(parent.context)
-        val size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, parent.context.resources.displayMetrics).toInt()
-        val layoutParams = RecyclerView.LayoutParams(size, size)
-        val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, parent.context.resources.displayMetrics).toInt()
-        layoutParams.setMargins(margin, 0, margin, 0)
+        // The size doesn't need to be set here, as it will be set in onBindViewHolder
+        val layoutParams = RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.WRAP_CONTENT,
+            RecyclerView.LayoutParams.WRAP_CONTENT
+        )
         dot.layoutParams = layoutParams
-
-        // You can set background color or other properties for the dot here
-        dot.background = getDotDrawable(parent.context)
-
+        dot.background = getDotDrawable()
         return ViewHolder(dot)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Change dot appearance based on whether it's selected
+        val context = holder.itemView.context
+        val size = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            if (position == _selectedPosition) 15f else 10f,
+            context.resources.displayMetrics
+        ).toInt()
+        val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
+        layoutParams.width = size
+        layoutParams.height = size
+
+        val defaultSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, context.resources.displayMetrics).toInt()
+        val selectedSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, context.resources.displayMetrics).toInt()
+        val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, context.resources.displayMetrics).toInt()
+
+        if (position == _selectedPosition) {
+            val extraMargin = (selectedSize - defaultSize) / 2
+            layoutParams.setMargins(margin, 0, margin, 0)
+        } else {
+            layoutParams.setMargins(margin, 0, margin, 0)
+        }
+
+        holder.itemView.layoutParams = layoutParams
         holder.itemView.isSelected = position == _selectedPosition
+        currentPosition(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == _selectedPosition) SELECTED_DOT_TYPE else DEFAULT_DOT_TYPE
     }
 
     override fun getItemCount() = totalDots
 
-    private fun getDotDrawable(context: Context): Drawable {
+    private fun getDotDrawable(): Drawable {
         // Programmatically create a state list drawable for the dot
         val stateListDrawable = StateListDrawable()
         val selectedDot = ShapeDrawable(OvalShape())

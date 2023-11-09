@@ -1,13 +1,18 @@
 package com.sampleandroidapp.clean.di.core.module
 
+import com.sampleandroidapp.data.api.EmployeeApi
 import com.sampleandroidapp.data.api.MovieApi
 import com.sampleandroidapp.data.db.favoritemovies.FavoriteMovieDao
 import com.sampleandroidapp.data.db.movies.MovieDao
 import com.sampleandroidapp.data.db.movies.MovieRemoteKeyDao
+import com.sampleandroidapp.data.repository.employee.EmployeeRemoteDataSource
+import com.sampleandroidapp.data.repository.employee.EmployeeRemoteDataSourceImpl
+import com.sampleandroidapp.data.repository.employee.EmployeeRepositoryImpl
 import com.sampleandroidapp.data.repository.movie.*
 import com.sampleandroidapp.data.repository.movie.favorite.FavoriteMoviesDataSource
 import com.sampleandroidapp.data.repository.movie.favorite.FavoriteMoviesLocalDataSource
 import com.sampleandroidapp.data.util.DiskExecutor
+import com.sampleandroidapp.domain.repository.EmployeeRepository
 import com.sampleandroidapp.domain.repository.MovieRepository
 import com.sampleandroidapp.domain.usecase.*
 import dagger.Module
@@ -36,12 +41,28 @@ class DataModule {
 
     @Provides
     @Singleton
+    fun provideEmployeeRepository(
+        employeeRemote: EmployeeRemoteDataSource,
+    ): EmployeeRepository {
+        return EmployeeRepositoryImpl(employeeRemote)
+    }
+
+    @Provides
+    @Singleton
     fun provideMovieLocalDataSource(
         executor: DiskExecutor,
         movieDao: MovieDao,
         movieRemoteKeyDao: MovieRemoteKeyDao,
     ): MovieDataSource.Local {
         return MovieLocalDataSource(executor, movieDao, movieRemoteKeyDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEmployeeRemoteDataSource(
+        employeeApi: EmployeeApi
+    ): EmployeeRemoteDataSource {
+        return EmployeeRemoteDataSourceImpl(employeeApi)
     }
 
     @Provides
@@ -66,6 +87,11 @@ class DataModule {
     @Singleton
     fun provideMovieRemoveDataSource(movieApi: MovieApi): MovieDataSource.Remote {
         return MovieRemoteDataSource(movieApi)
+    }
+
+    @Provides
+    fun provideEmployeesUseCase(employeeRemoteRepository: EmployeeRepository): GetEmployees{
+        return GetEmployees(employeeRemoteRepository)
     }
 
     @Provides

@@ -18,6 +18,14 @@
     </fragment>
 
     <fragment
+        android:id="@+id/onboardFragment"
+        android:name="com.sampleandroidapp.clean.ui.onboard.OnboardFragment"
+        android:label="Onboard"
+        tools:layout="@layout/fragment_onboard">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.sampleandroidapp.clean.ui.favorites.FavoritesFragment"
         android:label="Favorites"

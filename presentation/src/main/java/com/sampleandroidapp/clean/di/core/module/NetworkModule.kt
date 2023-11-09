@@ -3,6 +3,7 @@ package com.sampleandroidapp.clean.di.core.module
 import com.sampleandroidapp.data.BuildConfig
 import com.sampleandroidapp.data.api.MovieApi
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.sampleandroidapp.data.api.EmployeeApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +42,11 @@ class NetworkModule {
     @Provides
     fun provideMovieApi(retrofit: Retrofit): MovieApi {
         return retrofit.create(MovieApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEmployeeApi(retrofit: Retrofit): EmployeeApi {
+        return retrofit.create(EmployeeApi::class.java)
     }
 }
