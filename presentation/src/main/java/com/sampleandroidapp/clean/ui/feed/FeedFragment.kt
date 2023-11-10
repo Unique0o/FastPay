@@ -16,7 +16,6 @@ import com.sampleandroidapp.clean.ui.adapter.movie.MoviePagingAdapter
 import com.sampleandroidapp.clean.ui.adapter.movie.loadstate.MovieLoadStateAdapter
 import com.sampleandroidapp.clean.ui.base.BaseFragment
 import com.sampleandroidapp.clean.ui.feed.FeedViewModel.NavigationState.MovieDetails
-import com.sampleandroidapp.clean.ui.moviedetails.EmployeeViewModel
 import com.sampleandroidapp.clean.util.NetworkMonitor
 import com.sampleandroidapp.clean.util.createMovieGridLayoutManager
 import com.sampleandroidapp.clean.util.launchAndRepeatWithViewLifecycle
@@ -32,8 +31,6 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment<FragmentFeedBinding>() {
 
     private val viewModel: FeedViewModel by viewModels()
-
-    private val employeeViewModel: EmployeeViewModel by viewModels()
 
     private val movieAdapter by lazy { MoviePagingAdapter(viewModel::onMovieClicked, getImageFixedSize()) }
 

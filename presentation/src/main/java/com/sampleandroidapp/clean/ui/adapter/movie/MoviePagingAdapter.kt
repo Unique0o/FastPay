@@ -30,6 +30,7 @@ class MoviePagingAdapter(
         else -> throw RuntimeException("Illegal view type")
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         when (holder) {

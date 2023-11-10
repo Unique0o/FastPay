@@ -9,4 +9,9 @@
         android:id="@+id/favoritesFragment"
         android:icon="@drawable/ic_favorite_border_white_48"
         android:title="@string/favorites" />
+
+    <item
+        android:id="@+id/employeesFragment"
+        android:icon="@drawable/ic_employees"
+        android:title="@string/employees" />
 </menu>

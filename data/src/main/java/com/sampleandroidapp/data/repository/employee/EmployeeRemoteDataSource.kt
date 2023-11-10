@@ -5,5 +5,5 @@ import com.sampleandroidapp.domain.response.EmployeeResponse
 import com.sampleandroidapp.domain.util.Result
 
 interface EmployeeRemoteDataSource {
-    suspend fun getEmployees(): Result<BaseResponse>
+    suspend fun getEmployees(): Result<EmployeeResponse>
 }

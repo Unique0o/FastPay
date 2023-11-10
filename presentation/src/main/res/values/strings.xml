@@ -3,6 +3,7 @@
     <string name="clean_architecture">Clean Architecture</string>
     <string name="feed">Feed</string>
     <string name="favorites">Favorites</string>
+    <string name="employees">Employees</string>
     <string name="movie_details_placeholder_text">Click on a movie\n to view its details.</string>
     <string name="search">Search</string>
     <string name="no_movies_found">There were no movies found.</string>
