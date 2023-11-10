@@ -5,10 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.sampleandroidapp.clean.R
 import com.sampleandroidapp.clean.databinding.FragmentEmployeesBinding
+import com.sampleandroidapp.clean.ui.adapter.generic.GenericAdapter
 import com.sampleandroidapp.clean.ui.base.BaseFragment
 import com.sampleandroidapp.clean.ui.moviedetails.EmployeeViewModel
 import com.sampleandroidapp.clean.util.launchAndRepeatWithViewLifecycle
+import com.sampleandroidapp.domain.entities.EmployeeEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -16,6 +19,24 @@ import kotlinx.coroutines.launch
 class EmployeesFragment : BaseFragment<FragmentEmployeesBinding>() {
 
     private val viewModel: EmployeeViewModel by viewModels()
+
+    private val employeeAdapter: GenericAdapter<EmployeeEntity> by lazy {
+        GenericAdapter(
+            layoutId = R.layout.item_employee,
+            bind = { item, view ->
+                // Bind your item to the view
+            },
+            itemClick = { item ->
+                // Handle item click
+            },
+            itemsSame = { oldItem, newItem ->
+                oldItem.id == newItem.id  // Assuming each item has a unique 'id'
+            },
+            contentsSame = { oldItem, newItem ->
+                oldItem == newItem  // Replace with a more detailed comparison if needed
+            }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
